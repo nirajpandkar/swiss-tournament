@@ -4,7 +4,7 @@
 #
 
 import psycopg2
-
+import random
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
@@ -63,6 +63,20 @@ def playerStandings():
         matches: the number of matches the player has played
     """
     connection = connect()
+    cursor2 = connection.cursor()
+    cursor2.execute("SELECT id FROM players")
+    player_ids = cursor2.fetchall()
+    cursor1 = connection.cursor()
+
+    # every player is present in the standings table
+    for i in range(len(player_ids)):
+        opponent = random.choice(player_ids)    # random opponent
+        while opponent == player_ids[i]:
+            opponent = random.choice(player_ids)
+        cursor1.execute("INSERT INTO matches(player, opponent, result)"
+                        "VALUES(%s, %s, 2)",
+                        (player_ids[i], opponent))
+
     cursor = connection.cursor()
     cursor.execute("SELECT * from standings")
     standings = cursor.fetchall()
@@ -77,7 +91,15 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-
+    connection = connect()
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO matches(player, opponent, result)"
+                   "VALUES(%s, %s, 1)",
+                   (winner, loser))
+    cursor.execute("INSERT INTO matches(player, opponent, result)"
+                   "VALUES(%s, %s, 0)",
+                   (loser, winner))
+    connection.commit()
  
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
@@ -94,3 +116,19 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
+    connection = connect()
+    cursor = connection.cursor()
+    cursor.execute("SELECT id, standings.name, wins "
+                   "FROM standings ORDER BY wins DESC ")
+    pairs = cursor.fetchall()
+    pairings = []
+    i = 0
+    while i < len(pairs):
+        id1 = pairs[i][0]
+        name1 = pairs[i][1]
+        id2 = pairs[i+1][0]
+        name2 = pairs[i+1][1]
+        pairings.append([id1, name1, id2, name2])
+        i = i + 2
+
+    return pairings
