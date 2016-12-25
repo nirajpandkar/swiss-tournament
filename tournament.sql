@@ -25,20 +25,27 @@ CREATE TABLE matches(
 );
 
 CREATE VIEW no_wins AS
-SELECT players.id, count(matches.opponent) AS count_wins
-FROM players, matches
-WHERE players.id = matches.player AND matches.result>0
-GROUP BY players.id;
+    SELECT players.id,
+        SUM(CASE matches.result
+        WHEN 1 THEN 1
+        ELSE 0
+        END) AS count_wins
+    FROM players, matches
+    WHERE players.id = matches.player AND matches.result>0
+    GROUP BY players.id;
 
 CREATE VIEW no_matches AS
-(SELECT players.id, count(matches.opponent) AS count_matches
-FROM players, matches
-WHERE players.id = matches.player
-GROUP BY players.id);
+    SELECT players.id,
+        SUM(CASE matches.result
+        WHEN 2 THEN 0
+        ELSE 1
+        END) AS count_matches
+    FROM players, matches
+    WHERE players.id = matches.player
+    GROUP BY players.id;
 
 CREATE VIEW standings AS
-SELECT players.id, players.name, no_wins.count_wins AS wins, no_matches
-                                                       .count_matches AS
-matches
-FROM players, no_wins, no_matches
-WHERE players.id=no_wins.id AND no_wins.id=no_matches.id;
+    SELECT players.id, players.name, no_wins.count_wins AS wins,
+    no_matches.count_matches AS matches
+    FROM players, no_wins, no_matches
+    WHERE players.id=no_wins.id AND no_wins.id=no_matches.id;
