@@ -4,7 +4,7 @@
 #
 
 import psycopg2
-
+import random
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
@@ -67,10 +67,16 @@ def playerStandings():
     cursor2.execute("SELECT id FROM players")
     player_ids = cursor2.fetchall()
     cursor1 = connection.cursor()
-    cursor1.execute("INSERT INTO matches(player, opponent, result)"
-                    "VALUES(%s, %s, 2)", (player_ids[0], player_ids[1]))
-    cursor1.execute("INSERT INTO matches(player, opponent, result)"
-                    "VALUES(%s, %s, 2)", (player_ids[1], player_ids[0]))
+
+    # every player is present in the standings table
+    for i in range(len(player_ids)):
+        opponent = random.choice(player_ids)    # random opponent
+        while opponent == player_ids[i]:
+            opponent = random.choice(player_ids)
+        cursor1.execute("INSERT INTO matches(player, opponent, result)"
+                        "VALUES(%s, %s, 2)",
+                        (player_ids[i], opponent))
+
     cursor = connection.cursor()
     cursor.execute("SELECT * from standings")
     standings = cursor.fetchall()
@@ -85,7 +91,15 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-
+    connection = connect()
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO matches(player, opponent, result)"
+                   "VALUES(%s, %s, 1)",
+                   (winner, loser))
+    cursor.execute("INSERT INTO matches(player, opponent, result)"
+                   "VALUES(%s, %s, 0)",
+                   (loser, winner))
+    connection.commit()
  
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
