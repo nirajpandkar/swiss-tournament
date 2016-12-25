@@ -78,7 +78,7 @@ def playerStandings():
                         (player_ids[i], opponent))
 
     cursor = connection.cursor()
-    cursor.execute("SELECT * from standings")
+    cursor.execute("SELECT * FROM standings ORDER BY wins DESC")
     standings = cursor.fetchall()
     connection.commit()
     return standings

@@ -6,22 +6,19 @@
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
 DROP DATABASE IF EXISTS tournament;
-CREATE database tournament;
+CREATE DATABASE tournament;
 \c tournament;
-DROP VIEW IF EXISTS standings;
-DROP VIEW IF EXISTS no_wins;
-DROP VIEW IF EXISTS no_matches;
 
 CREATE TABLE players(
-    name varchar(50) NOT NULL,
-    id serial PRIMARY KEY
+    name VARCHAR(50) NOT NULL,
+    id SERIAL PRIMARY KEY
 );
 
 CREATE TABLE matches(
-    match_id serial PRIMARY KEY ,
-    player int REFERENCES players(id),
-    opponent int REFERENCES players(id),
-    result int
+    match_id SERIAL PRIMARY KEY ,
+    player INT REFERENCES players(id) ON DELETE CASCADE ,
+    opponent INT REFERENCES players(id) ON DELETE CASCADE,
+    result INT
 );
 
 CREATE VIEW no_wins AS
