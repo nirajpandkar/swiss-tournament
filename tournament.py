@@ -63,6 +63,14 @@ def playerStandings():
         matches: the number of matches the player has played
     """
     connection = connect()
+    cursor2 = connection.cursor()
+    cursor2.execute("SELECT id FROM players")
+    player_ids = cursor2.fetchall()
+    cursor1 = connection.cursor()
+    cursor1.execute("INSERT INTO matches(player, opponent, result)"
+                    "VALUES(%s, %s, 2)", (player_ids[0], player_ids[1]))
+    cursor1.execute("INSERT INTO matches(player, opponent, result)"
+                    "VALUES(%s, %s, 2)", (player_ids[1], player_ids[0]))
     cursor = connection.cursor()
     cursor.execute("SELECT * from standings")
     standings = cursor.fetchall()
