@@ -15,21 +15,21 @@ def deleteMatches():
     """Remove all the match records from the database."""
     connection = connect()
     cursor = connection.cursor()
-    cursor.execute("delete from matches")
+    cursor.execute("DELETE FROM matches")
     connection.commit()
 
 def deletePlayers():
     """Remove all the player records from the database."""
     connection = connect()
     cursor = connection.cursor()
-    cursor.execute("delete from players")
+    cursor.execute("DELETE FROM players")
     connection.commit()
 
 def countPlayers():
     """Returns the number of players currently registered."""
     connection = connect()
     cursor = connection.cursor()
-    cursor.execute("select count(*) from players")
+    cursor.execute("SELECT count(*) FROM players")
     connection.commit()
     playerCount = cursor.fetchone()
     return playerCount[0]

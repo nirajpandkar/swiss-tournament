@@ -24,19 +24,21 @@ CREATE TABLE matches(
     result int
 );
 
-create view no_wins as
-select players.id, count(matches.opponent)
-from players, matches
-where players.id = matches.player and (matches.result>0 or matches.result == 2)
-group by players.id;
+CREATE VIEW no_wins AS
+SELECT players.id, count(matches.opponent) AS count_wins
+FROM players, matches
+WHERE players.id = matches.player AND matches.result>0
+GROUP BY players.id;
 
-create view no_matches as
-(select players.id, count(matches.opponent)
-from players, matches
-where players.id = matches.player
-group by players.id);
+CREATE VIEW no_matches AS
+(SELECT players.id, count(matches.opponent) AS count_matches
+FROM players, matches
+WHERE players.id = matches.player
+GROUP BY players.id);
 
-create view standings as
-select players.id, players.name, no_wins.count as wins, no_matches.count as matches
-from players, no_wins, no_matches
-where players.id=no_wins.id and no_wins.id=no_matches.id;
+CREATE VIEW standings AS
+SELECT players.id, players.name, no_wins.count_wins AS wins, no_matches
+                                                       .count_matches AS
+matches
+FROM players, no_wins, no_matches
+WHERE players.id=no_wins.id AND no_wins.id=no_matches.id;
