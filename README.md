@@ -24,31 +24,50 @@
     * For windows - Use the link above to download the Git Bash
     * For Unix users - Any favorite terminal
 * Make a directory and change directory 
-    * For eg: `mkdir Udacity; cd Udacity`
+    ```
+    $ mkdir Udacity 
+    $ cd Udacity
+    ```
 * For downloading VM configuration - 
-    * `git clone http://github.com/udacity/fullstack-nanodegree-vm `
+    ```
+    $ git clone http://github.com/udacity/fullstack-nanodegree-vm 
+    ```
     *OR*
-    * [FSND-Virtual-Machine.zip](https://d17h27t6h515a5.cloudfront.net/topher/2016/December/58488015_fsnd-virtual-machine/fsnd-virtual-machine.zip)
-* Move to the vagrant folder - `cd fullstack-nanodegree-vm/vagrant`
+    [FSND-Virtual-Machine.zip](https://d17h27t6h515a5.cloudfront.net/topher/2016/December/58488015_fsnd-virtual-machine/fsnd-virtual-machine.zip)
+* Move to the vagrant folder
+    ```
+    $ cd fullstack-nanodegree-vm/vagrant
+    ```
 * Delete the existing tournament folder if you don't want to start from scratch - `rm -r tournament/`
 * Clone this project inside the vagrant folder - 
-    * `git clone http://github.com/nirajpandkar/swiss-tournament tournament`
+    ```
+    $ git clone http://github.com/nirajpandkar/swiss-tournament tournament
+    ```
 * Run vagrant
-    * Download the Linux operating system - `vagrant up`
-    * Log-in to the newly installed Linux VM - `vagrant ssh`
+    * Download the Linux operating system - `$ vagrant up`
+    * Log-in to the newly installed Linux VM - `$ vagrant ssh`
     
 ## Usage
 
 1. Move to the working folder
-    * `cd /vagrant/tournament`
+   ```
+   $ cd /vagrant/tournament
+   ```
 2. Load the database
-    * `psql -f tournament.sql`
+    ```
+    $ psql -f tournament.sql
+    ```
 3. Fire up the python console and import tournament
-    * `python`
-    * `import tournament`
+    ```
+    $ python
+    >>> import tournament
+    ```
+     
 4. Play around with the [functions](#api)
 5. Run the code against the given test suite
-    * `python tournament_test.py`
+    ```
+    $ python tournament_test.py
+    ```
     
 ## API
 
