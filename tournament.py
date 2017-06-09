@@ -25,6 +25,7 @@ def deletePlayers():
     cursor.execute("DELETE FROM players")
     connection.commit()
 
+
 def countPlayers():
     """Returns the number of players currently registered."""
     connection = connect()
@@ -129,6 +130,6 @@ def swissPairings():
         id2 = pairs[i+1][0]
         name2 = pairs[i+1][1]
         pairings.append([id1, name1, id2, name2])
-        i = i + 2
+        i += 2
 
     return pairings
